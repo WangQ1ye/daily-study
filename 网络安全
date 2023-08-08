@@ -1,0 +1,9 @@
+网络安全
+1.XSS（跨站脚本-Cross-Site Scripting）
+2.CSRF（Cross-Site Request Forgery） 跨站请求伪造 在用户登录不知情情况下，向目标网站发送恶意请求，并执行未授权操作
+3.TCP 三次握手
+4.http1和http2区别
+ （1.http2采用2进制数据传输，http1采用文本形式
+ （2.http2采用多路复用，可以并行发送请求
+ （3.http2对header进行了压缩，减少网络开销
+ （4.http2支持服务器自动对送请求给客户端，减少往返次数
