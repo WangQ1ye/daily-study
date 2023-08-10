@@ -1,0 +1,50 @@
+1.Omit<Type,keys> (剔除不需要的属性)
+
+例如:(content在HTMLAttributes中已经定义)
+interface Popover extends Omit<HTMLAttributes<HTMLDivElement>,'content'>{
+    content:ReactNode
+}
+
+2.Pick<Type, Keys>    (选取需要的数据)
+
+interface Todo {
+title: string;
+description: string;
+completed: boolean;
+}
+ 
+type TodoPreview = Pick<Todo, "title" | "completed">;
+ 
+const todo: TodoPreview = {
+title: "Clean room",
+completed: false,
+};
+
+3.Partial<Type>    (变为可选属性)
+interface Todo {
+    title: string;
+    description: string;
+    }
+     
+    function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
+    return { ...todo, ...fieldsToUpdate };
+    }
+     
+    const todo1 = {
+    title: "organize desk",
+    description: "clear clutter",
+    };
+     
+    const todo2 = updateTodo(todo1, {
+    description: "throw out trash",
+    });
+    
+
+// 实现方式
+
+type Partial<T>={
+    [P in keyof T]?:T[P];
+}
+
+
+
