@@ -1,0 +1,67 @@
+// bese64 转file文件
+// Example usage
+const base64Data = 'data:image/jpeg;base64,/9j/4AAQSk...'; // Replace with your Base64 data
+
+export function base64ToFile(dataUrl: string, filename: string) {
+    const arr = dataUrl.split(',');
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const suffix = mime.split('/')[1];
+    const bstr = atob(arr[1]);
+    // const bstr = Buffer.from(arr[1], 'base64').toString();
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    // eslint-disable-next-line no-plusplus
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], `${filename}.${suffix}`, { type: mime });
+}
+
+// file 转 base64文件
+export function fileToBase64(file: File): Promise<any> {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// blob转file
+export function blobToFile(blob: Blob, name: string): File {
+    const { type } = blob;
+    return new File([blob], name, { type });
+}
+
+// file 转成 Image对象
+export async function fileToImage(file: File): Promise<HTMLImageElement> {
+    const base64 = await fileToBase64(file);
+    return new Promise((resolve) => {
+        const imgObj = new Image();
+        imgObj.onload = () => {
+            resolve(imgObj);
+        };
+        imgObj.onerror = () => {
+            resolve(imgObj);
+        };
+        imgObj.src = base64;
+    });
+}
+
+// 检测图片是否已经存在
+export function checkImgExists(
+    url: string
+    // cancelInfo?: { isCanceled: boolean }
+): Promise<boolean> {
+    return new Promise((resolve) => {
+        const imgObj = new Image();
+        imgObj.onload = () => {
+            resolve(true);
+        };
+        imgObj.onerror = () => {
+            resolve(false);
+        };
+        imgObj.src = url;
+    });
+}
