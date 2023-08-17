@@ -65,3 +65,41 @@ export function checkImgExists(
         imgObj.src = url;
     });
 }
+
+//canvas转image
+    const Canvas2Image=(canvas)=>{
+
+        const img=new Image()
+
+        img.src=canvas.toDataURL（"image/png"）
+
+    }
+
+//图片压缩到指定尺寸生成canvas
+    const image2Canvas=（
+
+        image:HTMLImageElement,
+
+        sw:number,
+
+        sh:number,
+
+        width:number,
+
+        height:number
+
+        )=>{
+
+            const canvas=document.createElement('canvas')
+
+            const ctx=canvas.getContext('2d')
+
+            canvas.width=width
+
+            canvas.height=height
+
+            ctx?.drawImage(image,0,0,sw,sg,0,0,width,height)
+
+            return canvas
+
+    }
