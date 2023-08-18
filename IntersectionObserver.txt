@@ -14,7 +14,7 @@ myObserver.observe(myElement);
 
 
 
-统计上报
+//统计上报 hooks
 import { useEffect } from 'react';
 
 export const useObserverEle = (
