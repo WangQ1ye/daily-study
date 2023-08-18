@@ -1,0 +1,61 @@
+IntersectionObserver 可以用于检测元素是否进入视口，可以用于实现无限滚动、懒加载等功能。
+
+const myObserver = new IntersectionObserver((entries, observer) => {
+ entries.forEach((entry) => {
+ if (entry.isIntersecting) {
+ console.log(`${entry.target.id} is now visible`);
+ observer.unobserve(entry.target);
+ }
+ });
+});
+const myElement = document.getElementById("myElement");
+myObserver.observe(myElement);
+使用场景：在Web应用中，可能需要实现无限滚动、懒加载等功能，使用IntersectionObserver可以方便地实现这些功能。
+
+
+
+统计上报
+import { useEffect } from 'react';
+
+export const useObserverEle = (
+    selector: string,
+    onShow?: (target: HTMLElement) => void,
+    data?: any
+) => {
+    useEffect(() => {
+        const els = document.querySelectorAll(selector);
+        if (!els || !els.length) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        if (!entry.target.getAttribute('data-observe')) {
+                            // console.log(
+                            //     'useObserverEle',
+                            //     selector,
+                            //     entry.target
+                            // );
+                            onShow?.(entry.target as HTMLElement);
+                            entry.target.setAttribute('data-observe', '1');
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                rootMargin: '0px',
+                threshold: 0.5,
+            }
+        );
+        els.forEach((el) => {
+            observer.observe(el);
+        });
+        return () => {
+            els.forEach((el) => {
+                observer.unobserve(el);
+            });
+        };
+    }, [data]);
+};
+
+export default useObserverEle;
