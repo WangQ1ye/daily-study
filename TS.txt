@@ -46,5 +46,14 @@ type Partial<T>={
     [P in keyof T]?:T[P];
 }
 
+4.type和interface
+    type:是类型的别名，1.可以针对任何类型
+                    2.作用域内只能同一个type只能定义一次   
+                    3.（继承写法：&）
+    interface:       1.针对的是一个对象结构的类型
+                    2.可以多次定义（会进行合并）
+                    3.（继承写法：extends）
 
-
+5.unknown、never
+  unknown定义的类型，可以赋任何值给它，但是使用的时候需要先进行断言
+  never：通常用于报错使用
