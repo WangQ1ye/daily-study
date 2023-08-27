@@ -57,3 +57,23 @@ type Partial<T>={
 5.unknown、never
   unknown定义的类型，可以赋任何值给它，但是使用的时候需要先进行断言
   never：通常用于报错使用
+
+6.Record<Keys,Type>
+简单来说，TypeScript中的Record可以实现定义一个对象的 key 和 value 类型，Record 后面的泛型就是对象键和值的类型。
+
+interface CatInfo {
+  age: number;
+  breed: string;
+}
+ 
+type CatName = "mincat" | "licat" | "mordred";
+ 
+const cats: Record<CatName, CatInfo> = {
+  mincat: { age: 10, breed: "小猫er" },
+  licat: { age: 5, breed: "李猫er" },
+  mordred: { age: 16, breed: "无名猫er" },
+};
+ 
+cats.licat;
+ 
+const cats: Record<CatName, CatInfo>
