@@ -1,0 +1,33 @@
+作用：反向代理 （重定向到另外一个url）
+     缓存，静态文件服务（css、html、js、img) 或者 请求回来需要缓存的data
+     ssl/tls加密：如果启用了SSL/TLS，Nginx可以负责加密和解密HTTPS请求和响应。
+     
+
+基本流程：
+      1.接受请求：监听指定端口，接收客户端发送的请求
+      2.解析请求：解析请求内容 包括请求方法（get、post）、url、头部信息
+      3.配置匹配：根据配置文件中的规则和匹配条件，决定处理方式
+      4.处理请求:（重定向、缓存静态文件、加密、解密https）
+      5.相应结果：相应报文（状态码、头部信息、相应内容）
+
+
+location = / {
+    [ configuration A ]
+}
+location / {
+    [ configuration B ]
+}
+location /sk/ {
+    [ configuration C ]
+}
+location ^~ /img/ {
+    [ configuration D ]
+}
+location ~* .(gif|jpg|jpeg)$ {
+    [ configuration E ]
+}
+= / 请求 / 精准匹配A，不再往下查找
+/ 请求/index.html匹配B。首先查找匹配的前缀字符，找到最长匹配是配置B，接着又按照顺序查找匹配的正则。结果没有找到，因此使用先前标记的最长匹配，即配置B。
+/sk/ 请求/sk/abc 匹配C。首先找到最长匹配C，由于后面没有匹配的正则，所以使用最长匹配C。
+~* .(gif|jpg|jpeg)$ 请求/sk/logo.gif 匹配E。首先进行前缀字符的查找，找到最长匹配项C，继续进行正则查找，找到匹配项E。因此使用E。
+^~ 请求/img/logo.gif匹配D。首先进行前缀字符查找，找到最长匹配D。但是它使用了^~修饰符，不再进行下面的正则的匹配查找，因此使用D。
