@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .color {
+        width: 300px;
+        height: 300px;
+      }
+    </style>
+  </head>
+  <script>
+    window.onload = () => {
+      //随机颜色
+      (function () {
+        const color =
+          '#' + Math.random().toString(16).substring(2, 8).padEnd(6, '0');
+        console.log(color);
+        const el = document.querySelector('.color');
+        el.style.backgroundColor = color;
+      })();
+
+      //随机字符串
+      function randomString(length) {
+        const string =
+          length <= 11
+            ? Math.random()
+                .toString(32)
+                .substring(2, length + 2)
+                .padEnd(length, '0')
+            : randomString(11) + randomString(length - 11);
+        return string;
+      }
+      console.log(randomString(100));
+    };
+  </script>
+  <body>
+    <div class="color"></div>
+  </body>
+</html>
