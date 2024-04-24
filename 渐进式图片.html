@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        width: 100vw;
+        height: 100vh;
+      }
+      .progressive {
+        position: relative;
+        margin: auto;
+        width: calc(100vw - 200px);
+        height: calc(100vh - 120px);
+        background-color: rebeccapurple;
+      }
+      .thumbnail,
+      .hd {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .hd {
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        filter: blur(10px);
+        transition: 1s filter;
+        z-index: 1;
+      }
+      .active {
+        opacity: 1;
+        filter: blur(0px);
+      }
+    </style>
+  </head>
+  <script>
+    function handleLoadImg() {
+      const el = document.querySelector('.hd');
+      el.classList.add('active');
+    }
+  </script>
+  <body>
+    <div class="progressive">
+      <img class="thumbnail" src="./images/thumbnail.png" />
+      <img class="hd" src="./images/hd.jpeg" onload="handleLoadImg()" />
+    </div>
+  </body>
+</html>
