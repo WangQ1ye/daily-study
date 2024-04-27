@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      https://www.douyin.com/user/MS4wLjABAAAAy68qgQPB-aGWv7MKIRB544hLgzY18xgXhywYjnN-XKk?modal_id=7356153942922759458&vid=7356153942922759458
+    </title>
+  </head>
+  <body style="background-color: black; text-align: center">
+    <canvas class="canvas"></canvas>
+    <script>
+      const audioEl = document.querySelector('.audio');
+      const cvs = document.querySelector('.canvas');
+      const ctx = cvs.getContext('2d');
+      function initCvs() {
+        const size = 500;
+        cvs.width = size * devicePixelRatio;
+        cvs.height = size * devicePixelRatio;
+        cvs.style.width = cvs.style.height = size + 'px';
+      }
+      initCvs();
+
+      function draw(datas, maxValue) {
+        const r = cvs.width / 4 + 20 * devicePixelRatio;
+        const center = cvs.width / 2;
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        const hslStep = 360 / (datas.length - 1);
+        const maxLen = cvs.width / 2 - r;
+        const minLen = 2 * devicePixelRatio;
+        for (let i = 0; i < datas.length; i++) {
+          ctx.beginPath();
+          const len = Math.max((datas[i] / maxValue) * maxLen, minLen);
+          const rotate = hslStep * i;
+          ctx.strokeStyle = `hsl(${rotate}deg ,65%, 65%)`;
+          ctx.lineWidth = minLen;
+          const rad = (rotate * Math.PI) / 180;
+          const beginX = center + Math.cos(rad) * r;
+          const beginY = center + Math.sin(rad) * r;
+          const EndX = center + Math.cos(rad) * (r + len);
+          const EndY = center + Math.sin(rad) * (r + len);
+          ctx.moveTo(beginX, beginY);
+          ctx.lineTo(EndX, EndY);
+          ctx.stroke();
+        }
+      }
+      draw(new Array(256).fill(0), 255);
+
+      let isInit = false;
+      let analyser, buffer;
+      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        // audioEl.onplay=()=>{
+        if (isInit) {
+          return;
+        }
+        //音频上下文
+        const audioCtx = new AudioContext();
+        console.log(stream);
+        //创建音频分析器节点
+        analyser = audioCtx.createAnalyser();
+        //频域分析精度 值越大 资源占用越多
+        analyser.fftSize = 512;
+        //接受分析结果 example:[28,56,10]
+        buffer = new Uint8Array(analyser.frequencyBinCount);
+        //创建资源 源节点
+        const source = audioCtx.createMediaStreamSource(stream);
+        // const source= audioCtx.createMediaElementSource(audioEl)
+        //相互连接（源节点和分析器节点）
+        source.connect(analyser);
+        //相互连接（分析器节点连接设备）
+        // analyser.connect(audioCtx.destination);
+        isInit = true;
+      });
+
+      function update() {
+        requestAnimationFrame(update);
+        if (!isInit) {
+          return;
+        }
+        analyser.getByteFrequencyData(buffer);
+        const offset = Math.floor((buffer.length * 2) / 3);
+        const datas = new Array(offset * 2);
+        for (let i = 0; i < offset; i++) {
+          datas[i] = datas[datas.length - i - 1] = buffer[i];
+        }
+        draw(datas, 255);
+      }
+      update();
+    </script>
+  </body>
+</html>
