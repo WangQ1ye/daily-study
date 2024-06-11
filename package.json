@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "async": "^3.2.5",
+    "cheerio": "^1.0.0-rc.12",
+    "express": "^5.0.0-beta.2",
+    "superagent": "^9.0.2"
+  }
+}
